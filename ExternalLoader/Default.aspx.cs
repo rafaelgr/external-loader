@@ -21,49 +21,58 @@ public partial class Default : System.Web.UI.Page
     string formId = "";
     string fieldId = "";
     string message = "";
+    string extension = "";
     // other parameters
     string repository = "";
     #endregion
     protected void Page_Init(object sender, EventArgs e)
     {
-        //// read url parameters 
-        //if (Request.QueryString["ReturnUrl"] != null)
-        //{
-        //    returnUrl = Request.QueryString["ReturnUrl"];
-        //}
-        //else needParamUrlMessage("ReturnUrl");
-        ////
-        //if (Request.QueryString["Application"] != null)
-        //{
-        //    application = Request.QueryString["Appiclation"];
-        //}
-        //else needParamUrlMessage("Application");
-        ////
-        //if (Request.QueryString["UserId"] != null)
-        //{
-        //    userId = Request.QueryString["UserId"];
-        //}
-        //else needParamUrlMessage("UserId");
-        ////
-        //if (Request.QueryString["FormId"] != null)
-        //{
-        //    formId = Request.QueryString["FormId"];
-        //}
-        //else needParamUrlMessage("UserId");
-        ////
-        //if (Request.QueryString["FieldId"] != null)
-        //{
-        //    fieldId = Request.QueryString["FieldId"];
-        //}
-        //else needParamUrlMessage("FieldId");
+        // read url parameters 
+        if (Request.QueryString["ReturnUrl"] != null)
+        {
+            returnUrl = Request.QueryString["ReturnUrl"];
+        }
+        else needParamUrlMessage("ReturnUrl");
         //
+        if (Request.QueryString["Application"] != null)
+        {
+            application = Request.QueryString["Appiclation"];
+        }
+        else needParamUrlMessage("Application");
+        //
+        if (Request.QueryString["UserId"] != null)
+        {
+            userId = Request.QueryString["UserId"];
+        }
+        else needParamUrlMessage("UserId");
+        //
+        if (Request.QueryString["FormId"] != null)
+        {
+            formId = Request.QueryString["FormId"];
+        }
+        else needParamUrlMessage("UserId");
+        //
+        if (Request.QueryString["FieldId"] != null)
+        {
+            fieldId = Request.QueryString["FieldId"];
+        }
+        else needParamUrlMessage("FieldId");
+        // 
+        if (Request.QueryString["Extension"] != null)
+        {
+            string[] extensions = new string[1];
+            extension = Request.QueryString["Extension"];
+            extensions[0] = extension;
+            rdUploader.AllowedFileExtensions = extensions;
+        }
 
-        // only for test purposes
-        returnUrl = "http://www.google.com";
-        application = "PortalPro";
-        userId = "U001";
-        formId = "Facturas";
-        fieldId = "PDF";
+        //// only for test purposes
+        //returnUrl = "http://www.google.com";
+        //application = "PortalPro";
+        //userId = "U001";
+        //formId = "Facturas";
+        //fieldId = "PDF";
+        //extension = ".pdf";
 
         if (Request.QueryString["Message"] != null)
         {
@@ -103,6 +112,12 @@ public partial class Default : System.Web.UI.Page
 
     protected void btnLoader_Click(object sender, EventArgs e)
     {
+        // 
+        if (rdUploader.InvalidFiles.Count > 0)
+        {
+            RadWindowManager1.RadAlert(String.Format("Debe escoger un fichero con la extensión {0}",extension), null, null, "Aviso", "doNothing");
+            return;
+        }
         // when file have been loaded this event fires
         int nf = rdUploader.UploadedFiles.Count;
         if (nf == 0)
